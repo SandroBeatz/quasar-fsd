@@ -1,10 +1,10 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
 
-import { defineConfig } from '#q-app/wrappers';
+import { configure } from 'quasar/wrappers';
 import { fileURLToPath } from 'node:url';
 
-export default defineConfig((ctx) => {
+export default configure((ctx) => {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -13,13 +13,13 @@ export default defineConfig((ctx) => {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
-      'i18n',
-      'axios'
+      '~/src/app/boot/i18n',
+      '~/src/app/boot/axios',
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: [
-      'app.scss'
+      '~/src/app/styles/app.scss',
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
@@ -38,6 +38,14 @@ export default defineConfig((ctx) => {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#build
     build: {
+      alias: {
+        App: fileURLToPath(new URL('./src/app', import.meta.url)),
+        Entities: fileURLToPath(new URL('./src/entities', import.meta.url)),
+        Features: fileURLToPath(new URL('./src/features', import.meta.url)),
+        Pages: fileURLToPath(new URL('./src/pages', import.meta.url)),
+        Shared: fileURLToPath(new URL('./src/shared', import.meta.url)),
+        Widgets: fileURLToPath(new URL('./src/widgets', import.meta.url)),
+      },
       target: {
         browser: [ 'es2022', 'firefox115', 'chrome115', 'safari14' ],
         node: 'node20'
@@ -67,7 +75,7 @@ export default defineConfig((ctx) => {
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
-      
+
       vitePlugins: [
         ['@intlify/unplugin-vue-i18n/vite', {
           // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
@@ -80,7 +88,7 @@ export default defineConfig((ctx) => {
           ssr: ctx.modeName === 'ssr',
 
           // you need to set i18n resource including paths !
-          include: [ fileURLToPath(new URL('./src/i18n', import.meta.url)) ]
+          include: [ fileURLToPath(new URL('./src/shared/i18n', import.meta.url)) ]
         }],
 
         ['vite-plugin-checker', {
@@ -230,6 +238,12 @@ export default defineConfig((ctx) => {
        * @example [ 'my-script.ts', 'sub-folder/my-other-script.js' ]
        */
       extraScripts: []
-    }
+    },
+
+    sourceFiles: {
+      rootComponent: './src/app/App.vue',
+      router: './src/app/router',
+      store: './src/app/stores',
+    },
   }
 });
