@@ -1,4 +1,4 @@
-import { store } from 'quasar/wrappers';
+import { store } from 'quasar/wrappers'
 import { createPinia } from 'pinia'
 
 /*
